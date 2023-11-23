@@ -13,5 +13,5 @@ CREATE TABLE `user` (
                         `auth_status` varchar(255),
                         `role_id` integer,
                         FOREIGN KEY (`role_id`) REFERENCES `role` (`id`),
-                        FOREIGN KEY (`created_by`) REFERENCES `user` (`id`);
+                        FOREIGN KEY (`created_by`) REFERENCES `user` (`id`)
 );
