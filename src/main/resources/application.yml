@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: &connectionUrl jdbc:mysql://${DB_CONNECTION_IP:localhost}:${DB_CONNECTION_PORT:3306}/growlab-task?allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password:
+  liquibase:
+    change-log: classpath:/db/changelog/db.changelog-master.yaml
+
+jwt:
+  token:
+    validity: 60000000
+    prefix: Bearer
+  signing:
+    key: asdsadsadsadsadasdasdsadsadsadasdasdasdsadasdasdasdsadadsadsadsadasdasdasd
+  authorities:
+    key: roles
+  header:
+    string: Authorization
