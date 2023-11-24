@@ -1,4 +1,4 @@
-package az.growlab.growlabtask.entity;
+package az.growlabtask.entity;
 
 import lombok.Data;
 

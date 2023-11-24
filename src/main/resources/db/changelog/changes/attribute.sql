@@ -1,4 +1,5 @@
 CREATE TABLE `attribute` (
-                             `id` integer PRIMARY KEY,
-                             `attribute` varchar(255)
+                             `id` BIGINT AUTO_INCREMENT PRIMARY KEY,
+                             `attribute` varchar(256),
+                             `module_id` BIGINT
 );

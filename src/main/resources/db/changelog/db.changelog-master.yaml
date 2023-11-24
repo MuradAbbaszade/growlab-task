@@ -1,9 +1,13 @@
 databaseChangeLog:
   - include:
+      file: classpath:/db/changelog/changes/user.sql
+  - include:
       file: classpath:/db/changelog/changes/role.sql
   - include:
       file: classpath:/db/changelog/changes/attribute.sql
   - include:
-      file: classpath:/db/changelog/changes/role_attribute.sql
+      file: classpath:/db/changelog/changes/log.sql
   - include:
-      file: classpath:/db/changelog/changes/user.sql
+      file: classpath:/db/changelog/changes/module.sql
+  - include:
+      file: classpath:/db/changelog/changes/user_role.sql
