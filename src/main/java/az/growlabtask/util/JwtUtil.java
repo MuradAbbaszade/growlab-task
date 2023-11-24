@@ -27,6 +27,8 @@ public class JwtUtil {
 
     @Value("${jwt.authorities.key}")
     public String AUTHORITIES_KEY;
+    @Value("${jwt.token.refresh}")
+    private Integer EXPIRE_REFRESH_DURATION;
 
     public String generateToken(Authentication authentication) {
         String authorities = authentication.getAuthorities()
@@ -40,6 +42,19 @@ public class JwtUtil {
                 .setExpiration(new Date(System.currentTimeMillis() + TOKEN_VALIDITY))
                 .signWith(key())
                 .compact();
+    }
+    public String generateRefreshTokenFromUsername(String username) {
+        return Jwts.builder().setSubject(username).setIssuedAt(new Date())
+                .setExpiration(new Date((new Date()).getTime() + EXPIRE_REFRESH_DURATION)).signWith(SignatureAlgorithm.HS512, SIGNING_KEY)
+                .compact();
+    }
+    public String generateTokenFromUsername(String username) {
+        return Jwts.builder().setSubject(username).setIssuedAt(new Date())
+                .setExpiration(new Date((new Date()).getTime() + TOKEN_VALIDITY)).signWith(SignatureAlgorithm.HS512, SIGNING_KEY)
+                .compact();
+    }
+    public Claims extractClaims(String token) {
+        return Jwts.parserBuilder().setSigningKey(SIGNING_KEY).build().parseClaimsJws(token).getBody();
     }
 
     private Key key() {

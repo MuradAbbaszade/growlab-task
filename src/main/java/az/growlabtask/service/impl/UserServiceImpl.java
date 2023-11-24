@@ -8,6 +8,7 @@ import az.growlabtask.enums.Status;
 import az.growlabtask.repository.RoleRepository;
 import az.growlabtask.repository.UserRepository;
 import az.growlabtask.service.UserService;
+import az.growlabtask.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.modelmapper.ModelMapper;
@@ -24,6 +25,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
     private final ModelMapper modelMapper;
+    private final JwtUtil jwtUtil;
     @Override
     public User signUp(SignUpRequest signUpRequest) {
         User user = new User();
@@ -46,5 +48,9 @@ public class UserServiceImpl implements UserService {
         user.setStatus(Status.ACTIVE);
         userRepository.save(user);
         return user;
+    }
+    @Override
+    public String createRefreshToken(String username) {
+        return jwtUtil.generateRefreshTokenFromUsername(username);
     }
 }

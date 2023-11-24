@@ -7,4 +7,5 @@ import org.springframework.stereotype.Service;
 @Service
 public interface UserService {
     User signUp(SignUpRequest signUpRequest);
+    String createRefreshToken(String username);
 }
