@@ -14,7 +14,7 @@ jwt:
     refresh: 1000000
     prefix: Bearer
   signing:
-    key: asdsadsadsadsadasdasdsadsadsadasdasdasdsadasdasdasdsadadsadsadsadasdasdasd
+    key: eyJhbGciOiJIUzI1NiJ9ew0KICAic3ViIjogImZlcnJ1bSIsDQogICJuYW1lIjogImZlcnJ1bSIsDQogICJpYXQiOiBmZXJydW0NCn0UNftWoEkNOLwS98iV5S1FDe5BLO5WHA4PppsAnmk7WQ
   authorities:
     key: roles
   header:

@@ -1,5 +1,7 @@
 package az.growlabtask.service.impl;
 
+import az.growlabtask.dto.JwtResponse;
+import az.growlabtask.dto.SignInRequest;
 import az.growlabtask.dto.SignUpRequest;
 import az.growlabtask.entity.Role;
 import az.growlabtask.entity.User;
@@ -7,21 +9,24 @@ import az.growlabtask.enums.AuthStatus;
 import az.growlabtask.enums.Status;
 import az.growlabtask.repository.RoleRepository;
 import az.growlabtask.repository.UserRepository;
-import az.growlabtask.service.UserService;
+import az.growlabtask.service.AuthService;
 import az.growlabtask.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Set;
 
 @RequiredArgsConstructor
 @Service
-public class UserServiceImpl implements UserService {
+public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
+    private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
     private final ModelMapper modelMapper;
@@ -52,5 +57,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public String createRefreshToken(String username) {
         return jwtUtil.generateRefreshTokenFromUsername(username);
+    }
+
+    @Override
+    public JwtResponse signIn(SignInRequest signInRequest) {
+        final Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        signInRequest.getEmail(),
+                        signInRequest.getPassword()
+                )
+        );
+        String refreshToken = createRefreshToken(signInRequest.getEmail());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        final String token = jwtUtil.generateToken(authentication);
+        return new JwtResponse(token,refreshToken);
     }
 }

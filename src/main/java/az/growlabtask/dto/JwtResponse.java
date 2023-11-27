@@ -1,17 +1,18 @@
 package az.growlabtask.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 
 @Data
 @Builder
+@NoArgsConstructor
 public class JwtResponse {
-    @Value("${app.jwt.token.prefix}")
-    private String type;
+    private final String TYPE = "Bearer";
     private String accessToken;
     private String refreshToken;
-    private String tokenType = type ;
     public JwtResponse(String accessToken, String refreshToken) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;

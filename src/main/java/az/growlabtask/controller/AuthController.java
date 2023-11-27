@@ -5,42 +5,27 @@ import az.growlabtask.dto.SignInRequest;
 import az.growlabtask.dto.SignUpRequest;
 import az.growlabtask.dto.TokenRefreshRequest;
 import az.growlabtask.entity.User;
-import az.growlabtask.service.UserService;
+import az.growlabtask.service.AuthService;
 import az.growlabtask.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/auth")
 public class AuthController {
-    private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
-    private final UserService userService;
+    private final AuthService authService;
 
     @PostMapping("/sign-up")
     public User signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
-        return userService.signUp(signUpRequest);
+        return authService.signUp(signUpRequest);
     }
     @PostMapping("/sign-in")
     public JwtResponse signIn(@RequestBody SignInRequest signInRequest) {
-        final Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        signInRequest.getEmail(),
-                        signInRequest.getPassword()
-                )
-        );
-        String refreshToken =userService.createRefreshToken(signInRequest.getEmail());
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        final String token = jwtUtil.generateToken(authentication);
-        return new JwtResponse(token,refreshToken);
+        return authService.signIn(signInRequest);
     }
     @PostMapping("/refresh-token")
     public JwtResponse refreshToken(@RequestBody TokenRefreshRequest request) {

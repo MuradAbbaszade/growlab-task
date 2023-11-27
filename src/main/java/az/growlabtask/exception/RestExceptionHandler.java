@@ -1,6 +1,7 @@
 package az.growlabtask.exception;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.SignatureException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -31,7 +32,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 
-    @ExceptionHandler(value = {ExpiredJwtException.class, IllegalArgumentException.class, UnsupportedOperationException.class})
+    @ExceptionHandler(value = {SignatureException.class, ExpiredJwtException.class, IllegalArgumentException.class, UnsupportedOperationException.class})
     protected ResponseEntity<Object> handleJwtException(Exception ex, WebRequest request) {
         String bodyOfResponse = ex.getMessage();
         log.info("An error occurred: {}", bodyOfResponse);
