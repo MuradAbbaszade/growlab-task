@@ -4,6 +4,7 @@ import az.growlabtask.dto.request.TokenRefreshRequest;
 import az.growlabtask.dto.response.JwtResponse;
 import az.growlabtask.dto.request.SignInRequest;
 import az.growlabtask.dto.request.SignUpRequest;
+import az.growlabtask.entity.Log;
 import az.growlabtask.entity.Role;
 import az.growlabtask.entity.User;
 import az.growlabtask.enums.AuthStatus;
@@ -11,6 +12,7 @@ import az.growlabtask.enums.Status;
 import az.growlabtask.repository.RoleRepository;
 import az.growlabtask.repository.UserRepository;
 import az.growlabtask.service.AuthService;
+import az.growlabtask.service.LogService;
 import az.growlabtask.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -21,11 +23,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @RequiredArgsConstructor
 @Service
 public class AuthServiceImpl implements AuthService {
+    private final LogService logService;
     private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
@@ -56,6 +60,14 @@ public class AuthServiceImpl implements AuthService {
         user.setCreatedBy(null);
         user.setStatus(Status.ACTIVE);
         userRepository.save(user);
+
+        Log log= Log.builder()
+                .eventTime(LocalDateTime.now())
+                .user(user)
+                .acceptedBy(null)
+                .acceptedTime(LocalDateTime.now())
+                .build();
+        logService.logAndSave(log);
         return user;
     }
 
