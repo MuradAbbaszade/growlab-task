@@ -22,6 +22,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.util.List;
+
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
@@ -31,7 +33,6 @@ public class SecurityConfig{
     private final JwtUtil jwtUtil;
     private final UserDetailsService userDetailsService;
     private final AuthEntryPointJwt authEntryPointJwt;
-    private final CustomerAuthorizationManager customerAuthorizationManager;
     private final ModuleRepository moduleRepository;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -44,7 +45,8 @@ public class SecurityConfig{
                 .and()
                 .authorizeHttpRequests((authz) -> authz
                         .antMatchers("/api/v1/auth/sign-up","/api/v1/auth/sign-in").permitAll()
-                        .antMatchers("/api/v1/customer").access(customerAuthorizationManager)
+                        .antMatchers("/api/v1/customer").access(new CustomerAuthorizationManager(jwtUtil,moduleRepository,
+                                userRepository,roleRepository, List.of("customer"),List.of("ROLE_USER")))
                 )
                 .addFilterBefore(authenticationTokenFilterBean(),
                         UsernamePasswordAuthenticationFilter.class)

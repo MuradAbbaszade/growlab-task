@@ -27,21 +27,21 @@ public class CustomerAuthorizationManager implements AuthorizationManager {
     private final ModuleRepository moduleRepository;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    //private String moduleName;
-    //private List<String> roles;
+    private List<String> moduleName;
+    private List<String> roles;
     @Override
     public AuthorizationDecision check(Supplier authentication, Object object) {
-        Module module = moduleRepository.findByName("customer").get();
+        Module module = moduleRepository.findByName(moduleName.get(0)).get();
         RequestAuthorizationContext requestAuthorizationContext = (RequestAuthorizationContext) object;
         Set<Attribute> moduleAttributeSet = module.getAttributes();
         String jwt = jwtUtil.parseJwt(requestAuthorizationContext.getRequest());
         String email = jwtUtil.getUsernameFromToken(jwt);
         User user = userRepository.findByEmail(email).get();
-       // for (String role : roles){
-            if(!user.getRoleSet().contains(roleRepository.findByRole("ROLE_USER").get())){
+        for (String role : roles){
+            if(!user.getRoleSet().contains(roleRepository.findByRole(role).get())){
                 return new AuthorizationDecision(false);
             }
-        //}
+        }
         Set<Attribute> userAttributeSet = user.getAttributes();
         boolean attributeIsExist = false;
         for (Attribute moduleAttribute : moduleAttributeSet) {
