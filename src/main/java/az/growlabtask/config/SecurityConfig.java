@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -44,6 +45,7 @@ public class SecurityConfig{
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeHttpRequests((authz) -> authz
+                        .antMatchers("/api/v1/auth/refresh-token").authenticated()
                         .antMatchers("/api/v1/auth/sign-up","/api/v1/auth/sign-in").permitAll()
                         .antMatchers("/api/v1/customer").access(new CustomAuthorizationManager(jwtUtil,moduleRepository,
                                 userRepository,roleRepository, List.of("customer"),List.of("ROLE_USER")))

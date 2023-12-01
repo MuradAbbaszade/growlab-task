@@ -1,5 +1,6 @@
 package az.growlabtask.service.impl;
 
+import az.growlabtask.dto.request.TokenRefreshRequest;
 import az.growlabtask.dto.response.JwtResponse;
 import az.growlabtask.dto.request.SignInRequest;
 import az.growlabtask.dto.request.SignUpRequest;
@@ -57,10 +58,6 @@ public class AuthServiceImpl implements AuthService {
         userRepository.save(user);
         return user;
     }
-    @Override
-    public String createRefreshToken(String username) {
-        return jwtUtil.generateRefreshTokenFromUsername(username);
-    }
 
     @Override
     public JwtResponse signIn(SignInRequest signInRequest) {
@@ -70,9 +67,20 @@ public class AuthServiceImpl implements AuthService {
                         signInRequest.getPassword()
                 )
         );
-        String refreshToken = createRefreshToken(signInRequest.getEmail());
+        String refreshToken = jwtUtil.generateRefreshTokenFromUsername(signInRequest.getEmail());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         final String token = jwtUtil.generateToken(authentication);
         return new JwtResponse(token,refreshToken);
+    }
+
+    @Override
+    public JwtResponse refreshToken(TokenRefreshRequest request) {
+        String requestRefreshToken = request.getRefreshToken();
+        jwtUtil.validateToken(requestRefreshToken);
+
+        String username=jwtUtil.extractClaims(request.getRefreshToken()).getSubject();
+        String token = jwtUtil.generateTokenFromUsername(username);
+        requestRefreshToken = jwtUtil.generateRefreshTokenFromUsername(username);
+        return new JwtResponse(token, requestRefreshToken);
     }
 }

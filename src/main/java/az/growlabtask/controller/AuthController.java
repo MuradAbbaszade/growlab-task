@@ -16,7 +16,6 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/auth")
 public class AuthController {
-    private final JwtUtil jwtUtil;
     private final AuthService authService;
 
     @PostMapping("/sign-up")
@@ -29,13 +28,6 @@ public class AuthController {
     }
     @PostMapping("/refresh-token")
     public JwtResponse refreshToken(@RequestBody TokenRefreshRequest request) {
-        String requestRefreshToken = request.getRefreshToken();
-        jwtUtil.validateToken(requestRefreshToken);
-
-        String username=jwtUtil.extractClaims(request.getRefreshToken()).getSubject();
-        String token = jwtUtil.generateTokenFromUsername(username);
-        requestRefreshToken = jwtUtil.generateRefreshTokenFromUsername(username);
-        return new JwtResponse(token, requestRefreshToken);
-
+        return authService.refreshToken(request);
     }
 }
