@@ -37,7 +37,7 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private AuthStatus authStatus;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_attribute",
             joinColumns = @JoinColumn(name = "user_id",referencedColumnName = "id"),
