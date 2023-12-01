@@ -11,7 +11,4 @@ public class Attribute {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String attribute;
-    @ManyToOne
-    @JoinColumn(name = "module_id",referencedColumnName = "id")
-    private Module module;
 }

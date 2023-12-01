@@ -2,10 +2,8 @@ package az.growlabtask.entity;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Data
@@ -14,4 +12,12 @@ public class Module {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  Long id;
     private String name;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "module_attribute",
+            joinColumns = @JoinColumn(name = "module_id",referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "attribute_id",referencedColumnName = "id")
+    )
+    private Set<Attribute> attributes;
 }

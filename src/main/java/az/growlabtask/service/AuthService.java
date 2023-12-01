@@ -1,8 +1,8 @@
 package az.growlabtask.service;
 
-import az.growlabtask.dto.JwtResponse;
-import az.growlabtask.dto.SignInRequest;
-import az.growlabtask.dto.SignUpRequest;
+import az.growlabtask.dto.response.JwtResponse;
+import az.growlabtask.dto.request.SignInRequest;
+import az.growlabtask.dto.request.SignUpRequest;
 import az.growlabtask.entity.User;
 import org.springframework.stereotype.Service;
 

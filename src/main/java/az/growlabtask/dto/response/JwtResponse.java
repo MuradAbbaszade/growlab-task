@@ -1,4 +1,4 @@
-package az.growlabtask.dto;
+package az.growlabtask.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

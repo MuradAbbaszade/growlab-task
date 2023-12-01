@@ -1,9 +1,9 @@
 package az.growlabtask.controller;
 
-import az.growlabtask.dto.JwtResponse;
-import az.growlabtask.dto.SignInRequest;
-import az.growlabtask.dto.SignUpRequest;
-import az.growlabtask.dto.TokenRefreshRequest;
+import az.growlabtask.dto.response.JwtResponse;
+import az.growlabtask.dto.request.SignInRequest;
+import az.growlabtask.dto.request.SignUpRequest;
+import az.growlabtask.dto.request.TokenRefreshRequest;
 import az.growlabtask.entity.User;
 import az.growlabtask.service.AuthService;
 import az.growlabtask.util.JwtUtil;
@@ -34,7 +34,7 @@ public class AuthController {
 
         String username=jwtUtil.extractClaims(request.getRefreshToken()).getSubject();
         String token = jwtUtil.generateTokenFromUsername(username);
-
+        requestRefreshToken = jwtUtil.generateRefreshTokenFromUsername(username);
         return new JwtResponse(token, requestRefreshToken);
 
     }

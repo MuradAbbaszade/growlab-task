@@ -1,8 +1,8 @@
 package az.growlabtask.service.impl;
 
-import az.growlabtask.dto.JwtResponse;
-import az.growlabtask.dto.SignInRequest;
-import az.growlabtask.dto.SignUpRequest;
+import az.growlabtask.dto.response.JwtResponse;
+import az.growlabtask.dto.request.SignInRequest;
+import az.growlabtask.dto.request.SignUpRequest;
 import az.growlabtask.entity.Role;
 import az.growlabtask.entity.User;
 import az.growlabtask.enums.AuthStatus;
@@ -37,9 +37,12 @@ public class AuthServiceImpl implements AuthService {
         userRepository.findByEmail(signUpRequest.getEmail()).ifPresent(account -> {
             throw new IllegalArgumentException("Email used");
         });
-        Role role = roleRepository.findByRole(az.growlabtask.enums.Role.USER.toString()).orElse(
+        userRepository.findByUsername(signUpRequest.getUsername()).ifPresent(account -> {
+            throw new IllegalArgumentException("Username used");
+        });
+        Role role = roleRepository.findByRole(az.growlabtask.enums.Role.ROLE_USER.toString()).orElse(
                 Role.builder()
-                        .role(az.growlabtask.enums.Role.USER.toString())
+                        .role(az.growlabtask.enums.Role.ROLE_USER.toString())
                         .createdBy(null)
                         .status(Status.ACTIVE)
                         .build()

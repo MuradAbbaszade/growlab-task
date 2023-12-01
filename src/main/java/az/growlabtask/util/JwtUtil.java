@@ -1,9 +1,13 @@
 package az.growlabtask.util;
 
+import az.growlabtask.entity.Role;
+import az.growlabtask.entity.User;
+import az.growlabtask.repository.UserRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,7 +22,9 @@ import java.util.stream.Collectors;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class JwtUtil {
+    private final UserRepository userRepository;
     @Value("${jwt.token.validity}")
     public long TOKEN_VALIDITY;
 
@@ -31,12 +37,13 @@ public class JwtUtil {
     private Integer EXPIRE_REFRESH_DURATION;
 
     public String generateToken(Authentication authentication) {
-        String authorities = authentication.getAuthorities()
+        User user = userRepository.findByUsername(authentication.getName()).get();
+        String authorities = user.getRoleSet()
                 .stream()
-                .map(GrantedAuthority::getAuthority)
+                .map(Role::getRole)
                 .collect(Collectors.joining(","));
         return Jwts.builder()
-                .setSubject(authentication.getName())
+                .setSubject(user.getEmail())
                 .claim(AUTHORITIES_KEY, authorities)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + TOKEN_VALIDITY))

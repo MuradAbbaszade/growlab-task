@@ -25,7 +25,7 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Status status;
     private Long createdBy;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_role",
             joinColumns = @JoinColumn(name = "user_id",referencedColumnName = "id"),
@@ -36,6 +36,14 @@ public class User implements UserDetails {
     private LocalDateTime lastUpdateTime;
     @Enumerated(EnumType.STRING)
     private AuthStatus authStatus;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_attribute",
+            joinColumns = @JoinColumn(name = "user_id",referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "attribute_id",referencedColumnName = "id")
+    )
+    private Set<Attribute> attributes;
 
     @PrePersist
     public void createTime(){

@@ -1,4 +1,4 @@
-package az.growlabtask.dto;
+package az.growlabtask.dto.request;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

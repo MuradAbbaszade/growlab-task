@@ -1,6 +1,6 @@
 CREATE TABLE `user` (
                         `id` BIGINT AUTO_INCREMENT PRIMARY KEY,
-                        `username` varchar(256),
+                        `username` varchar(256) unique,
                         `email` varchar(256),
                         `mobile` varchar(256),
                         `name` varchar(256),

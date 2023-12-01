@@ -24,11 +24,11 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @Configuration
 @EnableMethodSecurity
 @RequiredArgsConstructor
-public class SecurityConfig {
+public class SecurityConfig{
     private final JwtUtil jwtUtil;
     private final UserDetailsService userDetailsService;
     private final AuthEntryPointJwt authEntryPointJwt;
-
+    private final CustomerAuthorizationManager customerAuthorizationManager;
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http
@@ -38,13 +38,13 @@ public class SecurityConfig {
                 .and()
                 .authorizeHttpRequests((authz) -> authz
                         .antMatchers("/api/v1/auth/sign-up","/api/v1/auth/sign-in").permitAll()
+                        .antMatchers("/api/v1/customer").access(customerAuthorizationManager)
                 )
                 .addFilterBefore(authenticationTokenFilterBean(),
                         UsernamePasswordAuthenticationFilter.class)
                 .httpBasic(withDefaults());
         return http.build();
     }
-
     @Bean
     public AuthenticationProvider authenticationProvider() {
         AuthenticationProvider authenticationProvider = new DaoAuthProvider(passwordEncoder(), userDetailsService);
@@ -65,5 +65,4 @@ public class SecurityConfig {
     public JwtAuthFilter authenticationTokenFilterBean() throws Exception {
         return new JwtAuthFilter(jwtUtil, userDetailsService);
     }
-
 }

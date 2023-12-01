@@ -6,6 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Data
@@ -28,9 +29,8 @@ public class Role implements GrantedAuthority {
     public void createTime(){
         this.createTime = LocalDateTime.now();
     }
-
     @Override
     public String getAuthority() {
-        return role;
+        return this.role;
     }
 }
