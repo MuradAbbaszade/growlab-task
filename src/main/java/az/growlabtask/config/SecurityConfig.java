@@ -3,6 +3,9 @@ package az.growlabtask.config;
 import az.growlabtask.auth.AuthEntryPointJwt;
 import az.growlabtask.auth.DaoAuthProvider;
 import az.growlabtask.filter.JwtAuthFilter;
+import az.growlabtask.repository.ModuleRepository;
+import az.growlabtask.repository.RoleRepository;
+import az.growlabtask.repository.UserRepository;
 import az.growlabtask.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -29,6 +32,9 @@ public class SecurityConfig{
     private final UserDetailsService userDetailsService;
     private final AuthEntryPointJwt authEntryPointJwt;
     private final CustomerAuthorizationManager customerAuthorizationManager;
+    private final ModuleRepository moduleRepository;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http
