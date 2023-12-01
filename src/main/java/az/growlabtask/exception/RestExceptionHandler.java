@@ -21,14 +21,14 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = {CustomNotFoundException.class})
     protected ResponseEntity<Object> handleNotFoundException(Exception ex, WebRequest request) {
         String bodyOfResponse = ex.getMessage();
-        log.info("An error occured:{}", bodyOfResponse);
+        log.info("An error occurred:{}", bodyOfResponse);
         return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 
     @ExceptionHandler(value = {UsernameNotFoundException.class})
     protected ResponseEntity<Object> handleUsernameNotFoundException(Exception ex, WebRequest request) {
         String bodyOfResponse = ex.getMessage();
-        log.info("An error occured:{}", bodyOfResponse);
+        log.info("An error occurred:{}", bodyOfResponse);
         return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 

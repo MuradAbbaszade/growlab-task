@@ -2,7 +2,9 @@ package az.growlabtask.config;
 
 import az.growlabtask.entity.Attribute;
 import az.growlabtask.entity.Module;
+import az.growlabtask.entity.Role;
 import az.growlabtask.entity.User;
+import az.growlabtask.exception.CustomNotFoundException;
 import az.growlabtask.repository.ModuleRepository;
 import az.growlabtask.repository.RoleRepository;
 import az.growlabtask.repository.UserRepository;
@@ -28,14 +30,18 @@ public class CustomAuthorizationManager implements AuthorizationManager {
     private List<String> roles;
     @Override
     public AuthorizationDecision check(Supplier authentication, Object object) {
-        Module module = moduleRepository.findByName(moduleName.get(0)).get();
+        Module module = moduleRepository.findByName(moduleName.get(0))
+                .orElseThrow(() -> new CustomNotFoundException("Module not found!"));
         RequestAuthorizationContext requestAuthorizationContext = (RequestAuthorizationContext) object;
         Set<Attribute> moduleAttributeSet = module.getAttributes();
         String jwt = jwtUtil.parseJwt(requestAuthorizationContext.getRequest());
         String email = jwtUtil.getUsernameFromToken(jwt);
-        User user = userRepository.findByEmail(email).get();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomNotFoundException("User not found!"));
         for (String role : roles){
-            if(!user.getRoleSet().contains(roleRepository.findByRole(role).get())){
+            Role rol=roleRepository.findByRole(role)
+                    .orElseThrow(() -> new CustomNotFoundException("Role not found!"));
+            if(!user.getRoleSet().contains(rol)){
                 return new AuthorizationDecision(false);
             }
         }
