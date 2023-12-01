@@ -45,7 +45,7 @@ public class SecurityConfig{
                 .and()
                 .authorizeHttpRequests((authz) -> authz
                         .antMatchers("/api/v1/auth/sign-up","/api/v1/auth/sign-in").permitAll()
-                        .antMatchers("/api/v1/customer").access(new CustomerAuthorizationManager(jwtUtil,moduleRepository,
+                        .antMatchers("/api/v1/customer").access(new CustomAuthorizationManager(jwtUtil,moduleRepository,
                                 userRepository,roleRepository, List.of("customer"),List.of("ROLE_USER")))
                 )
                 .addFilterBefore(authenticationTokenFilterBean(),

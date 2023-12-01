@@ -2,15 +2,12 @@ package az.growlabtask.config;
 
 import az.growlabtask.entity.Attribute;
 import az.growlabtask.entity.Module;
-import az.growlabtask.entity.Role;
 import az.growlabtask.entity.User;
-import az.growlabtask.enums.Status;
 import az.growlabtask.repository.ModuleRepository;
 import az.growlabtask.repository.RoleRepository;
 import az.growlabtask.repository.UserRepository;
 import az.growlabtask.util.JwtUtil;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
@@ -22,7 +19,7 @@ import java.util.function.Supplier;
 
 @Component
 @AllArgsConstructor
-public class CustomerAuthorizationManager implements AuthorizationManager {
+public class CustomAuthorizationManager implements AuthorizationManager {
     private final JwtUtil jwtUtil;
     private final ModuleRepository moduleRepository;
     private final UserRepository userRepository;
