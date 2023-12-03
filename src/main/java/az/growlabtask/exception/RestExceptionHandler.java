@@ -32,7 +32,14 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 
-    @ExceptionHandler(value = {SignatureException.class, ExpiredJwtException.class, IllegalArgumentException.class, UnsupportedOperationException.class})
+    @ExceptionHandler(value = {IllegalArgumentException.class})
+    protected ResponseEntity<Object> handleIllegalArgumentException(Exception ex, WebRequest request) {
+        String bodyOfResponse = ex.getMessage();
+        log.info("An error occurred:{}", bodyOfResponse);
+        return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
+
+    @ExceptionHandler(value = {SignatureException.class, ExpiredJwtException.class, UnsupportedOperationException.class})
     protected ResponseEntity<Object> handleJwtException(Exception ex, WebRequest request) {
         String bodyOfResponse = ex.getMessage();
         log.info("An error occurred: {}", bodyOfResponse);
