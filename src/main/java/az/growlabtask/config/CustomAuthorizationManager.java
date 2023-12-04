@@ -10,8 +10,10 @@ import az.growlabtask.repository.RoleRepository;
 import az.growlabtask.repository.UserRepository;
 import az.growlabtask.util.JwtUtil;
 import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.AuthorizationManager;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +21,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
 
-@Component
+@Configuration
 @AllArgsConstructor
 public class CustomAuthorizationManager implements AuthorizationManager {
     private final JwtUtil jwtUtil;
@@ -35,6 +37,7 @@ public class CustomAuthorizationManager implements AuthorizationManager {
         RequestAuthorizationContext requestAuthorizationContext = (RequestAuthorizationContext) object;
         Set<Attribute> moduleAttributeSet = module.getAttributes();
         String jwt = jwtUtil.parseJwt(requestAuthorizationContext.getRequest());
+        if (jwt == null) throw new IllegalArgumentException("Auth required");
         String email = jwtUtil.getUsernameFromToken(jwt);
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomNotFoundException("User not found!"));
