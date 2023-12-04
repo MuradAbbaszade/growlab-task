@@ -6,7 +6,6 @@ import az.growlabtask.dto.request.SignUpRequest;
 import az.growlabtask.dto.request.TokenRefreshRequest;
 import az.growlabtask.entity.User;
 import az.growlabtask.service.AuthService;
-import az.growlabtask.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
