@@ -28,11 +28,12 @@ public class RoleController {
         return roleService.create(roleRequest);
     }
 
-    @PutMapping("/{roleId}")
-    public String update(@PathVariable Long roleId,@RequestBody RoleRequest roleRequest) {
-         roleService.update(roleId,roleRequest);
-        return "success";
+    @PutMapping("/add/user")
+    public void addRoleToUser(@RequestParam("roleId") Long roleId,
+                                   @RequestParam("userId") Long userId){
+        roleService.addRoleToUser(roleId,userId);
     }
+
     @DeleteMapping("/{roleId}")
     public String delete(@PathVariable Long roleId) {
          roleService.delete(roleId);

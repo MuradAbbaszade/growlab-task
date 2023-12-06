@@ -12,5 +12,4 @@ import lombok.Setter;
 public class RoleRequest {
     private String role;
     private Status status;
-    private Long userId;
 }

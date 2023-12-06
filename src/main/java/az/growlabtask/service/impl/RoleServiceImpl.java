@@ -1,6 +1,7 @@
 package az.growlabtask.service.impl;
 
 import az.growlabtask.dto.request.RoleRequest;
+import az.growlabtask.entity.Attribute;
 import az.growlabtask.entity.Role;
 import az.growlabtask.entity.User;
 import az.growlabtask.exception.CustomNotFoundException;
@@ -22,12 +23,11 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role create(RoleRequest roleRequest) {
-        Role role = roleMapper.toRole(roleRequest);
-        User user = userRepository.findById(roleRequest.getUserId())
-                .orElseThrow(() -> new CustomNotFoundException("User not found!"));
-        role.setCreatedBy(user);
-//        role.setCreateTime(LocalDateTime.now());
-        return roleRepository.save(role);
+        if (!roleRepository.findByRole(roleRequest.getRole()).isPresent()) {
+            Role role = roleMapper.toRole(roleRequest);
+            return roleRepository.save(role);
+        }
+        throw new IllegalArgumentException("Role already exist");
     }
 
     @Override
@@ -42,12 +42,11 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public void update(Long roleId, RoleRequest roleRequest) {
-        roleRepository.findById(roleId)
-                .orElseThrow(() -> new CustomNotFoundException("Role not found!"));
-        Role role = roleMapper.toRole(roleRequest);
-        roleRepository.save(role);
-
+    public void addRoleToUser(Long roleId, Long userId) {
+        Role role = getById(roleId);
+        User user = userRepository.findById(userId).get();
+        user.getRoleSet().add(role);
+        userRepository.save(user);
     }
 
     @Override

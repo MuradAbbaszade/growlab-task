@@ -9,7 +9,7 @@ public interface RoleService {
     Role create(RoleRequest roleRequest);
     List<Role> getAll();
     Role  getById(Long roleId);
+    void addRoleToUser(Long roleId, Long userId);
 
-    void update(Long roleId,RoleRequest roleRequest);
     void delete(Long roleId);
 }
