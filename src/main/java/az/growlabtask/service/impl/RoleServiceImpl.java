@@ -9,7 +9,9 @@ import az.growlabtask.mapper.RoleMapper;
 import az.growlabtask.repository.RoleRepository;
 import az.growlabtask.repository.UserRepository;
 import az.growlabtask.service.RoleService;
+import az.growlabtask.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,12 +21,14 @@ import java.util.List;
 public class RoleServiceImpl implements RoleService {
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
-    private final RoleMapper roleMapper;
+    private final ModelMapper modelMapper;
+    private final UserService userService;
 
     @Override
     public Role create(RoleRequest roleRequest) {
         if (!roleRepository.findByRole(roleRequest.getRole()).isPresent()) {
-            Role role = roleMapper.toRole(roleRequest);
+            Role role = new Role();
+            modelMapper.map(roleRequest,role);
             return roleRepository.save(role);
         }
         throw new IllegalArgumentException("Role already exist");
@@ -44,7 +48,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public void addRoleToUser(Long roleId, Long userId) {
         Role role = getById(roleId);
-        User user = userRepository.findById(userId).get();
+        User user = userService.findById(userId);
         user.getRoleSet().add(role);
         userRepository.save(user);
     }

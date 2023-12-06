@@ -12,7 +12,6 @@ import az.growlabtask.service.AttributeService;
 import az.growlabtask.service.ModuleService;
 import az.growlabtask.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,7 +22,6 @@ public class AttributeServiceImpl implements AttributeService {
     private final AttributeRepository attributeRepository;
     private final ModuleService moduleService;
     private final UserService userService;
-    private final ModelMapper modelMapper;
     private final ModuleRepository moduleRepository;
     private final UserRepository userRepository;
 

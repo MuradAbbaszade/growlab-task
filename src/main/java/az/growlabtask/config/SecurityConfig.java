@@ -45,6 +45,7 @@ public class SecurityConfig{
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeHttpRequests((authz) -> authz
+                        .antMatchers("/api/v1/attribute/**","/api/v1/module/**","/api/v1/role/**").hasRole("ADMIN")
                         .antMatchers("/api/v1/auth/refresh-token").authenticated()
                         .antMatchers("/api/v1/auth/sign-up","/api/v1/auth/sign-in").permitAll()
                         .antMatchers("/api/v1/customer").access(new CustomAuthorizationManager(jwtUtil,moduleRepository,
